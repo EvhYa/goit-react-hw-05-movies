@@ -8,12 +8,16 @@ export function Cast() {
   const [cast, setCast] = useState([]);
 
   const baseImgUrl = 'https://image.tmdb.org/t/p/w500';
+  const defaultImg =
+    'https://ireland.apollo.olxcdn.com/v1/files/0iq0gb9ppip8-UA/image;s=1000x700';
 
   useEffect(() => {
+    if (!movieId) {
+      return;
+    }
     getCast(movieId)
       .then(response => setCast(response.data.cast))
-      .catch(err => console.log(err.message))
-      .finally();
+      .catch(err => console.log(err.message));
   }, [movieId]);
 
   return (
@@ -22,7 +26,10 @@ export function Cast() {
         {cast?.map(({ cast_id, character, original_name, profile_path }) => (
           <li key={cast_id}>
             <Card>
-              <img src={baseImgUrl + profile_path} alt={original_name} />
+              <img
+                src={profile_path ? `${baseImgUrl + profile_path}` : defaultImg}
+                alt={original_name}
+              />
               <p>Character: {character}</p>
               <p>Name: {original_name}</p>
             </Card>

@@ -9,8 +9,7 @@ export function Reviews() {
   useEffect(() => {
     getReviews(movieId)
       .then(response => setReviews(response.data.results))
-      .catch(err => console.log(err.message))
-      .finally();
+      .catch(err => console.log(err.message));
   }, [movieId]);
 
   const result = reviews.length ? (

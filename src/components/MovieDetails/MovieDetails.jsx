@@ -1,12 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, Outlet, useLocation, useParams } from 'react-router-dom';
 import { getMovieDetails } from 'api';
-import { AdditionalInformation, Back, MovieContainer } from './MovieDetails.styled';
+import {
+  AdditionalInformation,
+  Back,
+  MovieContainer,
+} from './MovieDetails.styled';
 
 export default function MovieDetails() {
   const { movieId } = useParams();
   const [movieDetails, setMovieDetails] = useState('');
   const baseImgUrl = 'https://image.tmdb.org/t/p/w500';
+  const defaultImg =
+    'https://ireland.apollo.olxcdn.com/v1/files/0iq0gb9ppip8-UA/image;s=1000x700';
 
   const location = useLocation();
 
@@ -15,9 +21,12 @@ export default function MovieDetails() {
   useEffect(() => {
     getMovieDetails(movieId)
       .then(response => setMovieDetails(response.data))
-      .catch(err => console.log(err.message))
-      .finally();
+      .catch(err => console.log(err.message));
   }, [movieId]);
+
+  if (!movieDetails) {
+    return;
+  }
 
   const { poster_path, title, vote_average, overview, genres, release_date } =
     movieDetails;
@@ -30,11 +39,16 @@ export default function MovieDetails() {
         <Back>Go back</Back>
       </Link>
       <MovieContainer>
-        {<img src={baseImgUrl + poster_path} alt={title} />}
+        {
+          <img
+            src={poster_path ? `${baseImgUrl + poster_path}` : defaultImg}
+            alt={title}
+          />
+        }
         <div>
           <div>
             <h2>
-              {title} ({year})
+              {title} ({isNaN(year) ? 'unknown' : year})
             </h2>
             <p>User score: {vote_average}</p>
           </div>

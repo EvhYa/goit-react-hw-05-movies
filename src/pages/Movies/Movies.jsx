@@ -11,25 +11,6 @@ export default function Movies() {
 
   const [searchedMovie, setSearchedMovie] = useSearchParams();
   
-
-  // const updateQueryString = e => {
-  //   const nextParams = e.target.value !== '' ? { query: e.target.value } : {};
-  //   setSearchedMovie(nextParams);
-  // };
- 
- 
-  
-  const onMovieSearch = e => {
-    e.preventDefault();
-    const form = e.currentTarget;
-    setSearchedMovie({ query: form.elements.query.value });
-    form.reset();
-
-    // getSearchedMovie(query)
-    //   .then(response => setMovies(response.data.results))
-    //   .catch(err => console.log(err.message));
-  };
-
   useEffect(() => {
     const query = searchedMovie.get('query') ?? '';
     getSearchedMovie(query)
@@ -40,8 +21,7 @@ export default function Movies() {
   return (
     <div>
       <Form
-        onMovieSearch={onMovieSearch}
-        // updateQueryString={updateQueryString}
+        setSearchedMovie={setSearchedMovie}
       />
       <MoviesList moviesData={movies} location={location} link={''} />
     </div>
